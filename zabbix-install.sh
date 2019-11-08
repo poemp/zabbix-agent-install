@@ -25,15 +25,14 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 curl -o /etc/yum.repos.d/Ali.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 rpm -ivh https://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-1.el7.noarch.rpm
 
-rpm -qa |grep ftp
-rpm -qa |grep telnet-*
-yum clean all
-yum makecache
-yum -y update
-yum install ftp-* -y
-yum install telnet-* -y
+#rpm -qa |grep telnet-*
+#yum clean all
+#yum makecache
+#yum -y update
+#yum install ftp-* -y
+#yum install telnet-* -y
 yum install zabbix-agent -y
-yum install httpd -y 
+#yum install httpd -y
 echo "[Successfully installed Zabbix-agent in Centos]"
 echo '--------------------------------------------------------'
 
@@ -59,7 +58,7 @@ fi
 
 #Use rc.local to start zabbix and load iptables on boot
 if
-	[ ! -f "/etc/rc.local" ]; then
+	[[ ! -f "/etc/rc.local" ]]; then
 	ln -s /etc/rc.d/rc.local /etc/rc.local
 fi
 chmod +x /etc/rc.local
