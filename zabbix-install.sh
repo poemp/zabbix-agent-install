@@ -22,9 +22,13 @@ yum install wget -y
 echo "[-------------------------Centos Install ---------------------------------------]"
 echo "[Will Install Zabbix-agent in CentOs]"
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-curl -o /etc/yum.repos.d/Ali.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-rpm -ivh https://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-1.el7.noarch.rpm
-
+wget -O -c  /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum clean all
+yum makecache
+#rpm -ivh https://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-1.el7.noarch.rpm
+yum install -y https://mirrors.aliyun.com/zabbix/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-2.el7.noarch.rpm
+yum clean all
+yum makecache
 #rpm -qa |grep telnet-*
 #yum clean all
 #yum makecache

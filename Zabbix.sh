@@ -72,7 +72,7 @@ case $OS in
 		sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 		case $CentOS_RHEL_version in
 			5)
-				if [ $OS_BIT == 32 ]; then
+				if [ ${OS_BIT} == 32 ]; then
 					rpm -ivh https://repo.zabbix.com/zabbix/3.4/rhel/5/i386/zabbix-agent-3.4.14-1.el5.i686.rpm
 				else
 					rpm -ivh https://repo.zabbix.com/zabbix/3.4/rhel/5/x86_64/zabbix-agent-3.4.14-1.el5.x86_64.rpm

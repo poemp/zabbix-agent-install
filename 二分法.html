@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二分法</title>
+</head>
+<style type="text/css">
+    .center {
+        width: 1100px;
+        clear: both;
+        margin: 0 auto;
+    }
+
+    table.dataintable {
+        margin-top: 15px;
+        border-collapse: collapse;
+        border: 1px solid #aaa;
+        width: 100%;
+    }
+
+    table.dataintable th {
+        vertical-align: baseline;
+        padding: 5px 15px 5px 6px;
+        background-color: #aaaaaa;
+        border: 1px solid #3F3F3F;
+        text-align: center;
+        color: #fff;
+    }
+
+    table.dataintable td {
+        vertical-align: text-top;
+        padding: 6px 15px 6px 6px;
+        border: 1px solid #aaa;
+    }
+
+    table.dataintable tr:nth-child(odd) {
+        background-color: #F5F5F5;
+    }
+
+    table.dataintable tr:nth-child(even) {
+        background-color: #fff;
+    }
+
+    #result {
+        margin-top: 20px;
+    }
+
+    span {
+        font-weight: 700;
+        font-size: medium;
+    }
+
+    #fun {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<body>
+<div class="center">
+
+    <div id="fun">
+        计算的函数是 f(x) = x<sup>2</sup> + 3x - 7
+    </div>
+
+    <table class="dataintable" id="table">
+        <tr>
+            <th>a</th>
+            <th>b</th>
+            <th>c</th>
+            <th>f(a)</th>
+            <th>f(b)</th>
+            <th>f(c)</th>
+        </tr>
+
+    </table>
+
+    <div id="result">
+
+    </div>
+</div>
+</body>
+
+<script type="application/javascript">
+
+    /**
+     * 界面显示函数
+     */
+    function showTable(a, b, c, resA, resB, resC) {
+        var t = document.getElementById("table");
+
+        var tr = document.createElement("tr");
+
+        var tda = document.createElement("td");
+        tda.innerHTML = a;
+
+        var tdb = document.createElement("td");
+        tdb.innerHTML = b;
+
+        var tdc = document.createElement("td");
+        tdc.innerHTML = c;
+
+        var tdResA = document.createElement("td");
+        tdResA.innerHTML = resA;
+
+        var tdResB = document.createElement("td");
+        tdResB.innerHTML = resB;
+
+        var tdResC = document.createElement("td");
+        tdResC.innerHTML = resC;
+
+
+        tr.appendChild(tda);
+        tr.appendChild(tdb);
+        tr.appendChild(tdc);
+        tr.appendChild(tdResA);
+        tr.appendChild(tdResB);
+        tr.appendChild(tdResC);
+        t.append(tr);
+    }
+
+    /**
+     * 显示结果是
+     */
+    function showResult(resultA) {
+        var t = document.getElementById("result");
+        var span = document.createElement("span");
+        span.innerHTML = "最终的结果是：<span style='color: red;font-size: 24px'>" + resultA + "</span>  <i>取值是 a 可以是 b</i>";
+        t.append(span)
+    }
+
+    /**
+     * 解决两个数相加精度丢失问题
+     * @param a
+     * @param b
+     * @returns {Number}
+     */
+    function floatAdd(a, b) {
+        var c, d, e;
+        if (undefined == a || null == a || "" == a || isNaN(a)) {
+            a = 0;
+        }
+        if (undefined == b || null == b || "" == b || isNaN(b)) {
+            b = 0;
+        }
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        e = Math.pow(10, Math.max(c, d));
+        return (floatMul(a, e) + floatMul(b, e)) / e;
+    }
+
+    /**
+     * 解决两个数相减精度丢失问题
+     * @param a
+     * @param b
+     * @returns {Number}
+     */
+    function floatSub(a, b) {
+        var c, d, e;
+        if (undefined == a || null == a || "" == a || isNaN(a)) {
+            a = 0;
+        }
+        if (undefined == b || null == b || "" == b || isNaN(b)) {
+            b = 0;
+        }
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        e = Math.pow(10, Math.max(c, d));
+        return (floatMul(a, e) - floatMul(b, e)) / e;
+    }
+
+    /**
+     * 解决两个数相乘精度丢失问题
+     * @param a
+     * @param b
+     * @returns {Number}
+     */
+    function floatMul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {
+        }
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {
+        }
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    }
+
+    /**
+     * 解决两个数相除精度丢失问题
+     * @param a
+     * @param b
+     * @returns
+     */
+    function floatDiv(a, b) {
+        var c, d, e = 0,
+            f = 0;
+        try {
+            e = a.toString().split(".")[1].length;
+        } catch (g) {
+        }
+        try {
+            f = b.toString().split(".")[1].length;
+        } catch (g) {
+        }
+        return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), floatMul(c / d, Math.pow(10, f - e));
+    }
+
+    // **************************************** 以上代码不用关注 ******************************************
+    /**
+     * 定义函数 f(x) =  2^x + 3 * x -7
+     * @param x
+     * @returns {number}
+     */
+    function fun(x) {
+        var r = floatSub(floatAdd(Math.pow(2, x), 3 * x), 7);
+        return +r.toFixed(2);
+    }
+
+    /**
+     * 计算方式
+     * 计算区间为 [a,b], 计算精度为 precision
+     * @param a 开始值
+     * @param b 结束值
+     * @param precision 精度
+     */
+    function binary(a, b, precision) {
+        var c = floatDiv(floatAdd(a, b), 2);
+        var resultA = fun(a);
+        var resultB = fun(b);
+        var resultC = fun(c);
+
+        //结果打印在页面上显示出来
+        showTable(a, b, c, resultA, resultB, resultC);
+
+        //若f(c)=0,则c就是函数的零点;
+        if (resultC == 0) {
+            return c;
+        }
+
+        //判断是否达到精确度ξ:即若|a-b|<ξ,则得到零点近似值a(或b)
+        if (Math.abs(floatSub(a - b)) < precision) {
+            return a;
+        }
+
+        //比较 fun(a) , fun(c) , fun(b) 的值
+        //如果fun(a) fun(c) 符号相同，则计算区间[c, b]
+        //如果fun(c) 和fun(b)符号相同， 则计算区间[a,c]
+        if (resultA * resultC > 0) {
+            return binary(c, b, precision);
+        } else if (resultB * resultC > 0) {
+            return binary(a, c, precision);
+        }
+    }
+
+    var res = binary(1, 2, 0.1);
+    showResult(res)
+</script>
+</html>
