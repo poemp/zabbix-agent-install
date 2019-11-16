@@ -1,23 +1,23 @@
 #!/bin/bash
 yum install dos2unix -y
 dos2unix zabbix-src-install.sh
-server=zabbxi
+server='Zabbix service'
 hostname=127.0.0.1
 echo "[Start to Install Zabbix Agent...]"
 
 echo "Install Zabbix Dependency"
 yum -y install net-snmp-devel libxml2-devel libcurl-deve libevent libevent-devel curl curl-devel mydql-devel net-snmp snmp perl-DBI php-gd php-xml php-bcmath \
-php-mbstring php-ldap php-odbc php-xmlrpc mariadb-devel deltarpm  
-echo 'It’s Ok '
-
-yum install -y gcc
-yum install -y mariadb-devel
+php-mbstring php-ldap php-odbc php-xmlrpc mariadb-devel deltarpm gcc mariadb-devel
+echo 'Install Dependency Success '
 
 echo " Create Zabbix User And Group"
 groupadd zabbix
 useradd -g zabbix zabbix
+echo 'Create Zabbix User And Group Success'
 
-tar -zxvf zabbix-4.2.0.tar -C /usr/src/  
+echo 'Tar zabbix-4.2.0.tar To /Usr/src'
+tar -zxf zabbix-4.2.0.tar -C /usr/src/
+echo 'Tar zabbix-4.2.0.tar To /Usr/src Success'
 
 cd /usr/src/zabbix-4.2.0
 ./configure --prefix=/usr/local/zabbix --sysconfdir=/etc/zabbix --enable-agent --enable-proxy --with-mysql --enable-net-snmp --with-libcurl
