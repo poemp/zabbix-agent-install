@@ -20,20 +20,17 @@ tar -zxf zabbix-4.2.0.tar -C /usr/src/
 echo 'Tar zabbix-4.2.0.tar To /Usr/src Success'
 
 cd /usr/src/zabbix-4.2.0
-./configure --prefix=/usr/local/zabbix --sysconfdir=/etc/zabbix --enable-agent --enable-proxy --with-mysql --enable-net-snmp --with-libcurl
-make && make install  
+./configure --prefix=/usr/local/zabbix --sysconfdir=/etc/zabbix --enable-service --enable-agent --enable-proxy --with-mysql --enable-net-snmp --with-libcurl
+make && make install
 
-cp misc/init.d/fedora/core/zabbix_agentd  /etc/init.d/
-cp misc/init.d/fedora/core/zabbix_agentd /usr/local/sbin/
-chmod 755 /etc/init.d/zabbix_agentd
+echo "[Copy Zabbix-Agent To Init.d Dic]"
+cp src/zabbix_agent/zabbix_agentd /etc/init.d/
 
-if [[ ! -f '/etc/zabbix' ]]; then
-    mkdir -p /etc/zabbix
+echo "[Copy Config File To /etc/zabbix]"
+if [[ ! -f '/etc/zabbix/' ]]; then
+   mkdir -p /etc/zabbix/
 fi
-
-if [[ ! -f '/etc/zabbix/zabbix_agentd.conf' ]]; then
-   cp conf/zabbix_agentd.conf  /etc/zabbix/
-fi
+cp conf/zabbix_agentd.conf /etc/zabbix/
 
 
 echo '[Edit the Config File]'
@@ -46,13 +43,22 @@ sed -i "s/ServerActive=127.0.0.1/ServerActive=$server/g" /etc/zabbix/zabbix_agen
 sed -i "s/Hostname=Zabbix server/Hostname=$hostname/g" /etc/zabbix/zabbix_agentd.conf
 echo "[Edit The File  Success !!!!!]"
 
+echo "[Config System Config Service]"
+if [ -f '/usr/lib/systemd/system/zabbix_agentd.service' ]; then
+    rm -rf /usr/lib/systemd/system/zabbix_agentd.service
+fi
+
+
+chmod 755 /usr/lib/systemd/system/zabbix_agentd.service
+systemctl daemon-reload
+echo "[Copy Config File]"
 
 #Start Zabbix-agent on Boot
 chkconfig zabbix_agentd on
 systemctl start zabbix_agentd
 
 if
-	ps -A | grep "zabbix_agent" 
+	ps -A | grep "zabbix_agent"
 	then
 		echo "Zabbix-agent is Running"
 	else

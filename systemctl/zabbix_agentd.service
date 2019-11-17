@@ -1,0 +1,25 @@
+#编辑
+#vim /usr/lib/systemd/system/zabbix_agentd.service
+
+#脚本内容
+[Unit]
+Description=Zabbix Agent
+After=syslog.target
+After=network.target
+
+[Service]
+Environment="CONFFILE=/etc/zabbix/zabbix_agentd.conf"
+Type=forking
+Restart=on-failure
+PIDFile=/tmp/zabbix_agentd.pid
+KillMode=control-group
+ExecStart=/etc/init.d/zabbix_agentd
+ExecStop=/bin/kill -SIGTERM $MAINPID
+RestartSec=10s
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+#刷新配置
+#systemctl daemon-reload
