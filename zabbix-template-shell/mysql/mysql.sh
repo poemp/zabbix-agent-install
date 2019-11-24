@@ -21,51 +21,51 @@ if [ $# -ne "1" ];then
 fi
 
 case $1 in
-    uptime)
+    Uptime)
         result=`${CONNECTION} status 2>/dev/null |awk '{print $2}'`
         echo $result
         ;;
-    questions)
+    Questions)
         result=`${CONNECTION} status 2>/dev/null |awk '{print $6}'`
         echo $result
         ;;
-    com_update)
+    Com_update)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_update" |awk '{print $4}'`
         echo $result
         ;;
-    slow_queries)
+    Slow_queries)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Slow_queries" |awk '{print $4}'`
         echo $result
         ;;
-    com_select)
+    Com_select)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_select" |awk '{print $4}'`
         echo $result
         ;;
-    com_rollback)
+    Com_rollback)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_rollback" |awk '{print $4}'`
         echo $result
         ;;
-    com_insert)
+    Com_insert)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_insert" |awk '{print $4}'`
         echo $result
         ;;
-    com_delete)
+    Com_delete)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_delete" |awk '{print $4}'`
         echo $result
         ;;
-    com_commit)
+    Com_commit)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_commit" |awk '{print $4}'`
         echo $result
         ;;
-    bytes_sent)
+    Bytes_sent)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Bytes_sent" |awk '{print $4}'`
         echo $result
         ;;
-    bytes_received)
+    Bytes_received)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Bytes_received" |awk '{print $4}'`
         echo $result
         ;;
-    com_begin)
+    Com_begin)
         result=`${CONNECTION} extended-status 2>/dev/null |grep -w "Com_begin" |awk '{print $4}'`
         echo $result
         ;;*)
